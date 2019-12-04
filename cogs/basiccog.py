@@ -17,7 +17,7 @@ class BasicCog(commands.Cog):
         """
         応答コマンド
         """
-        print(os.listdir("."))
+        print(os.listdir(".db/"))
         message = f"こんにちは,{ctx.author}"
         await ctx.send(message)
 
