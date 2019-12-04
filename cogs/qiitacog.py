@@ -1,9 +1,4 @@
 from discord.ext import commands, tasks
-import datetime
-import shelve
-import requests
-
-from lib import qiita
 
 from settings import DISCORD_DEFAULT_CHANNEL, QIITA_LOOP_TIME, DB_DIR
 
