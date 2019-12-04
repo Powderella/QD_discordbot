@@ -46,7 +46,7 @@ class BasicCog(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def change_game(self, ctx, game):
-        game = discord.Streaming(game)
+        game = discord.Streaming(game, "https://qiita.com/pugiemonn/items/c4077958b480eb29878d")
         await self.bot.change_presence(activity=game)
 
     
