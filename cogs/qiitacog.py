@@ -5,7 +5,7 @@ import requests
 
 from lib import qiita
 
-from config import DISCORD_DEFAULT_CHANNEL, QIITA_LOOP_TIME, DB_DIR
+from settings import DISCORD_DEFAULT_CHANNEL, QIITA_LOOP_TIME, DB_DIR
 
 
 class QiitaCog(commands.Cog):
