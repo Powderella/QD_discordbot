@@ -21,6 +21,6 @@ class QiitaCog(commands.Cog):
     async def beforePrintQiitaArticleLatest(self):
         await self.bot.wait_until_ready()
         self.defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
-
+        print(self.defaultChannel)
 def setup(bot):
     bot.add_cog(QiitaCog(bot))
