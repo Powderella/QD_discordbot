@@ -66,7 +66,7 @@ class QiitaCog(commands.Cog):
     async def beforePrintQiitaArticleLatest(self):
         await self.bot.wait_until_ready()
         for guild in self.bot.guilds:
-            print(guild)
+            print(self.bot.is_ready())
             self.defaultChannel = guild.get_channel(DISCORD_DEFAULT_CHANNEL)
             print(self.defaultChannel)
             print(DISCORD_DEFAULT_CHANNEL)
