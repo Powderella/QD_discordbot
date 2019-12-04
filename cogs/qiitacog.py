@@ -15,6 +15,10 @@ class QiitaCog(commands.Cog):
     async def printer(self):
         print(self.index)
         self.index += 1
+    @printer.before_loop
+    async def before_printer(self):
+        print('waiting...')
+        await self.bot.wait_until_ready()
 
 def setup(bot):
     bot.add_cog(QiitaCog(bot))
