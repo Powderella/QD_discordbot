@@ -2,8 +2,8 @@ from discord.ext import commands
 import os
 import traceback
 
-bot = commands.Bot(command_prefix='/')
-token = os.environ['DISCORD_TOKEN']
+from config import DISCORD_TOKEN
+bot = commands.Bot(command_prefix='?')
 
 
 @bot.event
@@ -14,8 +14,8 @@ async def on_command_error(ctx, error):
 
 
 @bot.command()
-async def ping(ctx):
-    await ctx.send('pong')
+async def hello(ctx):
+    await ctx.send('hello,{ctx.author}')
 
 
-bot.run(token)
+bot.run(DISCORD_TOKEN)
