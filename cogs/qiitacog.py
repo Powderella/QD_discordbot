@@ -70,6 +70,8 @@ class QiitaCog(commands.Cog):
     
     @commands.group()
     async def qiita(self, ctx):
+        """
+        """
         if ctx.invoked_subcommand is None:
             await ctx.send("サブコマンドを入力してください。")
 
