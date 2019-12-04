@@ -12,7 +12,7 @@ class QiitaCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.defaultChannel = None
+        self.defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
         self.defaultDatetime = datetime.datetime.strptime("1990-01-01 00:00:00", "%Y-%m-%d %H:%M:%S")
         self.printQiitaArticleLatest.start()
         with shelve.open(DB_DIR) as db:
@@ -64,9 +64,6 @@ class QiitaCog(commands.Cog):
     @printQiitaArticleLatest.before_loop
     async def beforePrintQiitaArticleLatest(self):
         await self.bot.wait_until_ready()
-        while self.defaultChannel is None:
-            print("wait")
-            self.defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
     
     @commands.group()
     async def qiita(self, ctx):
