@@ -1,8 +1,6 @@
-rom discord.ext import commands # Bot Commands Frameworkのインポート
+from discord.ext import commands # Bot Commands Frameworkのインポート
 import discord
 import shelve
-
-from settings import DB_DIR
 
 # コグとして用いるクラスを定義。
 class TestCog(commands.Cog):
@@ -20,5 +18,29 @@ class TestCog(commands.Cog):
         message = f"こんにちは,{ctx.author}"
         await ctx.send(message)
 
+    @commands.command()
+    async def reloadcog(self, ctx, cogName):
+        """
+        こぐのリロード
+        """
+        message = (f"コグ{cogName}をリロードします。")
+        await ctx.send(message)
+        try:
+            self.bot.reload_extension(cogName)
+            message = f"リロード完了。"
+        except Exception as e:
+            print(e)
+            message = f"リロードできませんでした。"
+        finally:
+            await ctx.send(message)
+
+    @commands.command()
+    async def kill(self, ctx):
+        """
+        ぼっと殺害事件
+        """
+        print("kill bot")
+        await self.bot.logout()
+    
 def setup(bot):
     bot.add_cog(BasicCog(bot))
