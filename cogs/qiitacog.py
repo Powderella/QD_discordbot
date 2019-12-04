@@ -66,7 +66,7 @@ class QiitaCog(commands.Cog):
         await self.bot.wait_until_ready()
         while self.defaultChannel is None:
             print("wait")
-            self.defaultChannel = await self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
+            self.defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
     
     @commands.group()
     async def qiita(self, ctx):
