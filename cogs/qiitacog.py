@@ -8,7 +8,7 @@ class QiitaCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot        
         self.printQiitaArticleLatest.start()
-        self.defaultChannel = None
+        self.defaultChannel self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
         self.index = 0
 
     @tasks.loop(minutes=QIITA_LOOP_TIME)
