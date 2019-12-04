@@ -4,7 +4,7 @@ import traceback
 import os
 import shelve
 
-from config import DISCORD_TOKEN, DB_DIR
+from settings import DISCORD_TOKEN, DB_DIR
 
 cogs = os.listdir("./cogs/")
 

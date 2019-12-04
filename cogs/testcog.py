@@ -2,7 +2,7 @@ from discord.ext import commands # Bot Commands Frameworkのインポート
 import discord
 import shelve
 
-from config import DB_DIR
+from settings import DB_DIR
 
 # コグとして用いるクラスを定義。
 class TestCog(commands.Cog):

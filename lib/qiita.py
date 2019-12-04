@@ -6,7 +6,7 @@ import requests
 import json
 import shelve
 
-from config import QIITA_TAG_URL, QIITA_TOKEN
+from settings import QIITA_TAG_URL, QIITA_TOKEN
 
 class QiitaTagAPI():
     def __init__(self, page=1, per_page=10):
