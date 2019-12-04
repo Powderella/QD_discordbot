@@ -64,7 +64,9 @@ class QiitaCog(commands.Cog):
     @printQiitaArticleLatest.before_loop
     async def beforePrintQiitaArticleLatest(self):
         await self.bot.wait_until_ready()
-        self.defaultChannel = await self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
+        while self.defaultChannel is None:
+            print("wait")
+            self.defaultChannel = await self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
     
     @commands.group()
     async def qiita(self, ctx):
