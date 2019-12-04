@@ -8,6 +8,8 @@ from settings import DISCORD_TOKEN
 
 cogs = os.listdir("./cogs/")
 
+if os.path.exists("./db/"):
+    os.makedirs("./db/")
 INITIAL_COGS = ["cogs." + cog.strip(".py") for cog in cogs if cog.endswith(".py")]
 
 class QooDrakeMain(commands.Bot):
