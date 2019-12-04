@@ -1,4 +1,5 @@
 from discord.ext import commands, tasks
+import discord
 import datetime
 import shelve
 import requests
@@ -32,14 +33,14 @@ class QiitaCog(commands.Cog):
     def cog_unload(self):
         self.printQiitaArticleLatest.cancel()
     
-    @tasks.loop(minutes=QIITA_LOOP_TIME)
+    @tasks.loop(seconds=QIITA_LOOP_TIME)
     async def printQiitaArticleLatest(self):
+
         try:
             qtapi = qiita.QiitaTagAPI()
             articlesInfo = qtapi.getArticlesFromTags(self.qiita_tags, query=["title", "url", "created_at"])
         except requests.exceptions.HTTPError as e:
             print(e)
-
         for tag in self.qiita_tags:
             
             # 読み取った最新の記事の作られた時間を保存
@@ -66,8 +67,11 @@ class QiitaCog(commands.Cog):
         await self.bot.wait_until_ready()
         self.defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
     
+    
     @commands.group()
     async def qiita(self, ctx):
+        """
+        """
         if ctx.invoked_subcommand is None:
             await ctx.send("サブコマンドを入力してください。")
 
@@ -82,7 +86,7 @@ class QiitaCog(commands.Cog):
         message = f"QIITA_TAGSに{tag}が追加されました。"
         print(message)
         await ctx.send(message)
-        await self._check_tag()
+        self._check_tag()
         await ctx.send(f"\nCurrent tags:{self.qiita_tags}")
     
     @qiita.command()
@@ -95,13 +99,13 @@ class QiitaCog(commands.Cog):
         message = f"QIITA_TAGSに{tag}が削除されました。"
         print(message)
         await ctx.send(message)
-        await self._check_tag()
+        self._check_tag()
         await ctx.send(f"\nCurrent tags:{self.qiita_tags}")
 
     
     @qiita.command()
     async def check(self, ctx):
-        await self._check_tag()
+        self._check_tag()
         await ctx.send(f"\nCurrent tags:{self.qiita_tags}")
 
     

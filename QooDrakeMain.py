@@ -4,16 +4,16 @@ import traceback
 import os
 import shelve
 
-from settings import DISCORD_TOKEN, DB_DIR
+from settings import DISCORD_TOKEN, DISCORD_OWNER_ID
 
 cogs = os.listdir("./cogs/")
 
+if not os.path.exists("./db/"):
+    os.makedirs("./db/")
 INITIAL_COGS = ["cogs." + cog.strip(".py") for cog in cogs if cog.endswith(".py")]
 
 if not os.path.exists("./db/"):
     os.makedirs("./db/")
-with shelve.open(DB_DIR) as db:
-    db["cogs"] = INITIAL_COGS
 
 class QooDrakeMain(commands.Bot):
 
@@ -33,6 +33,7 @@ class QooDrakeMain(commands.Bot):
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
         print("opus lib is loaded :", discord.opus.is_loaded())
+        self.owner_id = DISCORD_OWNER_ID
 
 if __name__ == "__main__":
     bot = QooDrakeMain(command_prefix="?")
