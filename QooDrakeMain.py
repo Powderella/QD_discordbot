@@ -4,7 +4,7 @@ import traceback
 import os
 import shelve
 
-from settings import DISCORD_TOKEN
+from settings import DISCORD_TOKEN, DISCORD_OWNER_ID
 
 cogs = os.listdir("./cogs/")
 
@@ -30,6 +30,7 @@ class QooDrakeMain(commands.Bot):
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
         print("opus lib is loaded :", discord.opus.is_loaded())
+        self.owner_id = DISCORD_OWNER_ID
 
 if __name__ == "__main__":
     bot = QooDrakeMain(command_prefix="?")

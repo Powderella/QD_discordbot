@@ -45,5 +45,12 @@ class BasicCog(commands.Cog):
         print("kill bot")
         await self.bot.logout()
     
+    @commands.command()
+    @commands.is_owner()
+    async def change_game(self, ctx, game):
+        game = discord.Game(game)
+        await self.bot.change_presence(activity=game)
+
+    
 def setup(bot):
     bot.add_cog(BasicCog(bot))
