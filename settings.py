@@ -5,7 +5,7 @@ try:
 except ImportError:
     QIITA_TOKEN = os.environ["QIITA_TOKEN"]
     DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
-    DISCORD_DEFAULT_CHANNEL = os.environ["DISCORD_DEFAULT_CHANNEL"]
+    DISCORD_DEFAULT_CHANNEL = int(os.environ["DISCORD_DEFAULT_CHANNEL"])
 else:
     QIITA_TOKEN = config.QIITA_TOKEN
     DISCORD_TOKEN = config.DISCORD_TOKEN
