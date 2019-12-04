@@ -4,6 +4,8 @@ import traceback
 import os
 import shelve
 
+from settings import DISCORD_TOKEN, DB_DIR
+
 cogs = os.listdir("./cogs/")
 
 INITIAL_COGS = ["cogs." + cog.strip(".py") for cog in cogs if cog.endswith(".py")]
