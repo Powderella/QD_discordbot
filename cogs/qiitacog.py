@@ -82,7 +82,7 @@ class QiitaCog(commands.Cog):
         message = f"QIITA_TAGSに{tag}が追加されました。"
         print(message)
         await ctx.send(message)
-        await self._check_tag()
+        self._check_tag()
         await ctx.send(f"\nCurrent tags:{self.qiita_tags}")
     
     @qiita.command()
@@ -95,13 +95,13 @@ class QiitaCog(commands.Cog):
         message = f"QIITA_TAGSに{tag}が削除されました。"
         print(message)
         await ctx.send(message)
-        await self._check_tag()
+        self._check_tag()
         await ctx.send(f"\nCurrent tags:{self.qiita_tags}")
 
     
     @qiita.command()
     async def check(self, ctx):
-        await self._check_tag()
+        self._check_tag()
         await ctx.send(f"\nCurrent tags:{self.qiita_tags}")
 
     
