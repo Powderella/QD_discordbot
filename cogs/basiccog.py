@@ -16,8 +16,6 @@ class BasicCog(commands.Cog):
         """
         応答コマンド
         """
-        defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
-        print(defaultChannel)
         message = f"こんにちは,{ctx.author}"
         await ctx.send(message)
 
