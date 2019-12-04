@@ -1,1 +1,1 @@
-discordbot: python QooDrakeMain.py
+bot: python QooDrakeMain.py
