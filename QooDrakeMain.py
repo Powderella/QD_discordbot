@@ -3,8 +3,9 @@ import discord
 import traceback
 import os
 import shelve
+import dropbox
 
-from settings import DISCORD_TOKEN, DISCORD_OWNER_ID
+from settings import DISCORD_TOKEN, DISCORD_OWNER_ID, DROPBOX_TOKEN
 
 cogs = os.listdir("./cogs/")
 
