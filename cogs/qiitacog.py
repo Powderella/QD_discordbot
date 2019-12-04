@@ -66,8 +66,9 @@ class QiitaCog(commands.Cog):
     async def beforePrintQiitaArticleLatest(self):
         await self.bot.wait_until_ready()
         for guild in self.bot.guilds:
-            print(guild)
-    
+            self.defaultChannel = guild.get_channel(DISCORD_DEFAULT_CHANNEL)
+            if self.defaultChannel is not None:
+                break
     @commands.group()
     async def qiita(self, ctx):
         if ctx.invoked_subcommand is None:
