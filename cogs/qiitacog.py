@@ -5,7 +5,7 @@ from settings import DISCORD_DEFAULT_CHANNEL, QIITA_LOOP_TIME, DB_DIR
 class QiitaCog(commands.Cog):
 
     def __init__(self):
-        self.index = 0
+        self.index = 1
         self.printer.start()
 
     def cog_unload(self):
