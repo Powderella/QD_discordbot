@@ -1,6 +1,8 @@
 from discord.ext import commands # Bot Commands Frameworkのインポート
 import discord
 
+from settings import DISCORD_DEFAULT_CHANNEL
+
 # コグとして用いるクラスを定義。
 class BasicCog(commands.Cog):
 
@@ -14,6 +16,7 @@ class BasicCog(commands.Cog):
         """
         応答コマンド
         """
+        self.defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
         message = f"こんにちは,{ctx.author}"
         await ctx.send(message)
 

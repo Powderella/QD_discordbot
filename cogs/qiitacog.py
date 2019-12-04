@@ -34,13 +34,12 @@ class QiitaCog(commands.Cog):
     
     @tasks.loop(seconds=QIITA_LOOP_TIME)
     async def printQiitaArticleLatest(self):
-        print("a")
+
         try:
             qtapi = qiita.QiitaTagAPI()
             articlesInfo = qtapi.getArticlesFromTags(self.qiita_tags, query=["title", "url", "created_at"])
         except requests.exceptions.HTTPError as e:
             print(e)
-        print("b")
         for tag in self.qiita_tags:
             
             # 読み取った最新の記事の作られた時間を保存
