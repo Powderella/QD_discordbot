@@ -5,8 +5,7 @@ from pytz import timezone
 import re
 
 class QuoteCog(commands.Cog):
-
-    # TestCogクラスのコンストラクタ。Botを受取り、インスタンス変数として保持。
+    
     def __init__(self, bot):
         self.bot = bot
         self.pattern = r"https://discordapp.com/channels/\d+/\d+/\d+"

@@ -1,11 +1,10 @@
 from discord.ext import commands # Bot Commands Frameworkのインポート
 import discord
-import shelve
 
-from settings import DB_DIR
+from settings import DISCORD_DEFAULT_CHANNEL
 
 # コグとして用いるクラスを定義。
-class TestCog(commands.Cog):
+class BasicCog(commands.Cog):
 
     # TestCogクラスのコンストラクタ。Botを受取り、インスタンス変数として保持。
     def __init__(self, bot):
@@ -45,26 +44,11 @@ class TestCog(commands.Cog):
         await self.bot.logout()
     
     @commands.command()
-    async def reload_allcogs(self, ctx):
-        """
-        すべてのこぐのリロード
-        """
-        all_ok = True
-        with shelve.open(DB_DIR) as db:
-            loadedCogs = db["cogs"]
-        for cog in loadedCogs:
-            try:
-                self.bot.reload_extension(cog)
-            except Exception:
-                all_ok = False
-                print(f"reload {cog}: FAILED")
-                print(Exception)
-            else:
-                print(f"reload {cog}: SUCCESS")
-        if all_ok:
-            await ctx.send("リロード完了。")
-        else:
-            await ctx.send("リロード失敗。")
+    @commands.is_owner()
+    async def change_game(self, ctx, game):
+        game = discord.Game(game)
+        await self.bot.change_presence(activity=game)
 
+    
 def setup(bot):
-    bot.add_cog(TestCog(bot))
+    bot.add_cog(BasicCog(bot))
