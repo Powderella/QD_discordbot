@@ -2,8 +2,6 @@ from discord.ext import commands # Bot Commands Frameworkのインポート
 import discord
 import shelve
 
-from settings import DB_DIR
-
 # コグとして用いるクラスを定義。
 class TestCog(commands.Cog):
 
@@ -43,28 +41,6 @@ class TestCog(commands.Cog):
         """
         print("kill bot")
         await self.bot.logout()
-    
-    @commands.command()
-    async def reload_allcogs(self, ctx):
-        """
-        すべてのこぐのリロード
-        """
-        all_ok = True
-        with shelve.open(DB_DIR) as db:
-            loadedCogs = db["cogs"]
-        for cog in loadedCogs:
-            try:
-                self.bot.reload_extension(cog)
-            except Exception:
-                all_ok = False
-                print(f"reload {cog}: FAILED")
-                print(Exception)
-            else:
-                print(f"reload {cog}: SUCCESS")
-        if all_ok:
-            await ctx.send("リロード完了。")
-        else:
-            await ctx.send("リロード失敗。")
 
 def setup(bot):
     bot.add_cog(TestCog(bot))
