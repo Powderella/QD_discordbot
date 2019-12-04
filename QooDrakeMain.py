@@ -9,6 +9,9 @@ from settings import DISCORD_TOKEN, DB_DIR
 cogs = os.listdir("./cogs/")
 
 INITIAL_COGS = ["cogs." + cog.strip(".py") for cog in cogs if cog.endswith(".py")]
+
+if not os.path.exists("./db/"):
+    os.makedirs("./db/")
 with shelve.open(DB_DIR) as db:
     db["cogs"] = INITIAL_COGS
 
