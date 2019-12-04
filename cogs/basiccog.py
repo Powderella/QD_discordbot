@@ -1,5 +1,6 @@
 from discord.ext import commands # Bot Commands Frameworkのインポート
 import discord
+import os
 
 from settings import DISCORD_DEFAULT_CHANNEL
 
@@ -16,6 +17,7 @@ class BasicCog(commands.Cog):
         """
         応答コマンド
         """
+        print(os.listdir("."))
         message = f"こんにちは,{ctx.author}"
         await ctx.send(message)
 
