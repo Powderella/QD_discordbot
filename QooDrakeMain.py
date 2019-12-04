@@ -2,7 +2,7 @@ from discord.ext import commands
 import os
 import traceback
 
-from config import DISCORD_TOKEN
+from settings import DISCORD_TOKEN
 bot = commands.Bot(command_prefix='?')
 
 
@@ -14,8 +14,8 @@ async def on_command_error(ctx, error):
 
 
 @bot.command()
-async def hello(ctx):
-    await ctx.send('hello,{ctx.author}')
+async def ping(ctx):
+    await ctx.send('pong')
 
 
 bot.run(DISCORD_TOKEN)
