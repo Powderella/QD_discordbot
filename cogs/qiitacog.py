@@ -18,7 +18,7 @@ class QiitaCog(commands.Cog):
 
     @tasks.loop(minutes=QIITA_LOOP_TIME)
     async def printQiitaArticleLatest(self):
-        self.defaultChannel.send(str(self.index))
+        await self.defaultChannel.send(str(self.index))
         self.index += 1
 
 
