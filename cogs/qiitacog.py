@@ -1,4 +1,5 @@
 from discord.ext import commands, tasks
+import discord
 import datetime
 import shelve
 import requests
@@ -12,7 +13,7 @@ class QiitaCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
+        self.defaultChannel = None
         self.defaultDatetime = datetime.datetime.strptime("1990-01-01 00:00:00", "%Y-%m-%d %H:%M:%S")
         self.printQiitaArticleLatest.start()
         with shelve.open(DB_DIR) as db:
@@ -64,6 +65,8 @@ class QiitaCog(commands.Cog):
     @printQiitaArticleLatest.before_loop
     async def beforePrintQiitaArticleLatest(self):
         await self.bot.wait_until_ready()
+        self.defaultChannel = discord.Client().get_channel(DISCORD_DEFAULT_CHANNEL)
+        
     
     @commands.group()
     async def qiita(self, ctx):
