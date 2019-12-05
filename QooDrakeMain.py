@@ -4,19 +4,31 @@ import traceback
 import os
 import shelve
 
-from settings import DISCORD_TOKEN, DISCORD_OWNER_ID
+from settings import DISCORD_TOKEN, DISCORD_OWNER_ID, DROPBOX_TOKEN, LOCAL_PATH_DBFILE, LOCAL_PATH_DBFOLDER, PATH_DROPBOX
 
+# cogの名前の読み込みと、dbフォルダがなかった時に作る
 cogs = os.listdir("./cogs/")
 
 if not os.path.exists("./db/"):
+    import dropbox
+    import zipfile
+
     os.makedirs("./db/")
+
+    dbx = dropbox.Dropbox(DROPBOX_TOKEN)
+    dbx.users_get_current_account()
+    try:
+        dbx.files_download_to_file(LOCAL_PATH_DBFILE, PATH_DROPBOX)
+    except Exception:
+        print(Exception)
+    else:
+        with zipfile.ZipFile(LOCAL_PATH_DBFILE) as extract_zf:
+            extract_zf.extractall(LOCAL_PATH_DBFOLDER)
+
+
 INITIAL_COGS = ["cogs." + cog.strip(".py") for cog in cogs if cog.endswith(".py")]
 
-if not os.path.exists("./db/"):
-    os.makedirs("./db/")
-
 class QooDrakeMain(commands.Bot):
-
     # MyBotのコンストラクタ。
     def __init__(self, command_prefix):
         # スーパークラスのコンストラクタに値を渡して実行。
