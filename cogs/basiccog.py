@@ -1,6 +1,7 @@
 from discord.ext import commands # Bot Commands Frameworkのインポート
 import discord
 import os
+import requests
 
 from settings import DISCORD_DEFAULT_CHANNEL
 
@@ -51,6 +52,13 @@ class BasicCog(commands.Cog):
         game = discord.Game(game)
         await self.bot.change_presence(activity=game)
 
+    @commands.command()
+    async def trans(self, ctx, *text):
+        target_url = "https://script.google.com/macros/s/AKfycbzX-3H38aJUBIVhPxiPwfJg7TlRWhOpFwW7gOD0MNH1nk97knAF/exec"
+        params = {"text":" ".join(text), "source":"en", "target":"ja"}
+
+        req = requests.get(target_url, params=params)
+        await ctx.send(req.text)
     
 def setup(bot):
     bot.add_cog(BasicCog(bot))
