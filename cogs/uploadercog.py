@@ -18,7 +18,7 @@ class UploaderCog(commands.Cog):
         shutil.make_archive(LOCAL_PATH_DBFOLDER, "zip", LOCAL_PATH_DBFOLDER)
 
         with open(LOCAL_PATH_DBFILE, "rb") as f:
-            self.dbx.files_upload(f.read(), PATH_DROPBOX)
+            self.dbx.files_upload(f.read(), PATH_DROPBOX, mode=dropbox.files.WriteMode('overwrite'))
         print("DBFILE UPLOAD COMPLETE")
 
     @uploadDBLoop.before_loop
