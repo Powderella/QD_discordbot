@@ -33,7 +33,7 @@ class QiitaCog(commands.Cog):
     def cog_unload(self):
         self.printQiitaArticleLatest.cancel()
     
-    @tasks.loop(seconds=QIITA_LOOP_TIME)
+    @tasks.loop(minutes=QIITA_LOOP_TIME)
     async def printQiitaArticleLatest(self):
 
         try:
