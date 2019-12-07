@@ -17,19 +17,9 @@ class QiitaCog(commands.Cog):
         self.defaultDatetime = datetime.datetime.strptime("1990-01-01 00:00:00", "%Y-%m-%d %H:%M:%S")
         self.printQiitaArticleLatest.start()
         with shelve.open(DB_DIR) as db:
-            try :
-                print(db["qiita_tags"])
-            except KeyError:
-                db["qiita_tags"] = list()
-            finally:
-                self.qiita_tags = db["qiita_tags"]
+            self.qiita_tags = db.get("qiita_tags", list())
+            self.articlesCreatedAt = db.get("articles_createdat", dict())
 
-            try:
-                print(db["articles_createdat"])
-            except KeyError:
-                db["articles_createdat"] = dict()
-            finally:
-                self.articlesCreatedAt = db["articles_createdat"]
     def cog_unload(self):
         self.printQiitaArticleLatest.cancel()
     
@@ -41,24 +31,26 @@ class QiitaCog(commands.Cog):
             articlesInfo = qtapi.getArticlesFromTags(self.qiita_tags, query=["title", "url", "created_at"])
         except requests.exceptions.HTTPError as e:
             print(e)
-        for tag in self.qiita_tags:
-            
+
+        for tag in self.qiita_tags:            
             # 読み取った最新の記事の作られた時間を保存
             latestArticle = datetime.datetime.strptime(articlesInfo[tag][0]["created_at"],
                                                     "%Y-%m-%dT%H:%M:%S+09:00")
-            if latestArticle > self.articlesCreatedAt[tag]:
-                await self.defaultChannel.send(tag)
-            
+            # 初回記事だった場合タグを先頭につけるために最初のループを判断する
+            first_tagarticles_loop = True
+
             for articleInfo in articlesInfo[tag]:
                 atricleCreatedAt = datetime.datetime.strptime(articleInfo["created_at"], "%Y-%m-%dT%H:%M:%S+09:00")
                 
                 if (self.articlesCreatedAt[tag] >= atricleCreatedAt):
-                    break          
-                message = f'{articleInfo["title"]}\n{articleInfo["url"]}' 
-                await self.defaultChannel.send(message)
+                    break
+                if first_tagarticles_loop:
+                    msg = tag
+                    first_tagarticles_loop = False
+                msg += f'tag\n{articleInfo["title"]}\n{articleInfo["url"]}' 
+                await self.defaultChannel.send(msg)fo
             self.articlesCreatedAt[tag] = latestArticle
-            print(f"tag:{tag}は{self.articlesCreatedAt};より新しい記事はありません。")
-        
+
         self._check_tag()
 
 
@@ -66,8 +58,11 @@ class QiitaCog(commands.Cog):
     async def beforePrintQiitaArticleLatest(self):
         await self.bot.wait_until_ready()
         self.defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
-    
-    
+
+
+    """
+    QIITA TAG COMMAND AREA
+    """   
     @commands.group()
     async def qiita(self, ctx):
         """
