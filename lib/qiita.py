@@ -31,7 +31,7 @@ class QiitaTagAPI():
 
         async with aiohttp.ClientSession() as session:
             json = await self._fetchJson(url, session, headers)
-            return {self.tag: [self._purseJson(j) for j in json[0:item_num]]}
+            return [self._purseJson(j) for j in json[0:item_num]]
     
     def _purseJson(self, json, article_query=["title", "url", "created_at"]):
         """
