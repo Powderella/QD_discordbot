@@ -48,7 +48,7 @@ class QiitaCog(commands.Cog):
                     msg = tag
                     first_tagarticles_loop = False
                 msg += f'tag\n{articleInfo["title"]}\n{articleInfo["url"]}' 
-                await self.defaultChannel.send(msg)fo
+                await self.defaultChannel.send(msg)
             self.articlesCreatedAt[tag] = latestArticle
 
         self._check_tag()
