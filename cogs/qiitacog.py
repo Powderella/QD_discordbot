@@ -14,6 +14,7 @@ class QiitaCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.defaultChannel = None
+        self.qtapi = qiita.QiitaTagAPI()
         self.defaultDatetime = datetime.datetime.strptime("1990-01-01 00:00:00", "%Y-%m-%d %H:%M:%S")
         self.printQiitaArticleLatest.start()
         with shelve.open(DB_DIR) as db:
@@ -25,30 +26,25 @@ class QiitaCog(commands.Cog):
     
     @tasks.loop(minutes=QIITA_LOOP_TIME)
     async def printQiitaArticleLatest(self):
-
-        try:
-            qtapi = qiita.QiitaTagAPI()
-            articlesInfo = qtapi.getArticlesFromTags(self.qiita_tags, query=["title", "url", "created_at"])
-        except requests.exceptions.HTTPError as e:
-            print(e)
-
-        for tag in self.qiita_tags:            
+        for tag in self.qiita_tags:
+            first_loop = True
+            # 記事取得
+            qtapi.tag = tag
+            articles = await qtapi.fetchArticlesFromTag()
             # 読み取った最新の記事の作られた時間を保存
-            latestArticle = datetime.datetime.strptime(articlesInfo[tag][0]["created_at"],
+            latestArticle = datetime.datetime.strptime(articles[0]["created_at"],
                                                     "%Y-%m-%dT%H:%M:%S+09:00")
-            # 初回記事だった場合タグを先頭につけるために最初のループを判断する
-            first_tagarticles_loop = True
-
-            for articleInfo in articlesInfo[tag]:
+            for article in articles:
                 atricleCreatedAt = datetime.datetime.strptime(articleInfo["created_at"], "%Y-%m-%dT%H:%M:%S+09:00")
                 
                 if (self.articlesCreatedAt[tag] >= atricleCreatedAt):
                     break
-                if first_tagarticles_loop:
-                    msg = f'{tag}\n{articleInfo["title"]}\n{articleInfo["url"]}' 
-                    first_tagarticles_loop = False
-                else: 
-                    msg = f'\n{articleInfo["title"]}\n{articleInfo["url"]}' 
+                msg = f'{}{articleInfo["title"]}\n{articleInfo["url"]}'
+                if first_loop:
+                    msg.format(tag)
+                    first_loop = False
+                else:
+                    msg.format("")
                 await self.defaultChannel.send(msg)
             self.articlesCreatedAt[tag] = latestArticle
 
