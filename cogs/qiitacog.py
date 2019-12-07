@@ -45,9 +45,10 @@ class QiitaCog(commands.Cog):
                 if (self.articlesCreatedAt[tag] >= atricleCreatedAt):
                     break
                 if first_tagarticles_loop:
-                    msg = tag + f'tag\n{articleInfo["title"]}\n{articleInfo["url"]}' 
+                    msg = f'{tag}\n{articleInfo["title"]}\n{articleInfo["url"]}' 
                     first_tagarticles_loop = False
-                msg = f'tag\n{articleInfo["title"]}\n{articleInfo["url"]}' 
+                else: 
+                    msg = f'\n{articleInfo["title"]}\n{articleInfo["url"]}' 
                 await self.defaultChannel.send(msg)
             self.articlesCreatedAt[tag] = latestArticle
 
