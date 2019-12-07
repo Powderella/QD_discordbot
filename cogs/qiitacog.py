@@ -29,17 +29,17 @@ class QiitaCog(commands.Cog):
         for tag in self.qiita_tags:
             first_loop = True
             # 記事取得
-            qtapi.tag = tag
-            articles = await qtapi.fetchArticlesFromTag()
+            self.qtapi.tag = tag
+            articles = await self.qtapi.fetchArticlesFromTag()
             # 読み取った最新の記事の作られた時間を保存
             latestArticle = datetime.datetime.strptime(articles[0]["created_at"],
                                                     "%Y-%m-%dT%H:%M:%S+09:00")
             for article in articles:
-                atricleCreatedAt = datetime.datetime.strptime(articleInfo["created_at"], "%Y-%m-%dT%H:%M:%S+09:00")
+                atricleCreatedAt = datetime.datetime.strptime(article["created_at"], "%Y-%m-%dT%H:%M:%S+09:00")
                 
                 if (self.articlesCreatedAt[tag] >= atricleCreatedAt):
                     break
-                msg = f'{}{articleInfo["title"]}\n{articleInfo["url"]}'
+                msg = "{}\n" + f'{article["title"]}\n{article["url"]}'
                 if first_loop:
                     msg.format(tag)
                     first_loop = False
