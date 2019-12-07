@@ -71,7 +71,8 @@ class QiitaCog(commands.Cog):
             await ctx.send("サブコマンドを入力してください。")
 
     @qiita.command()
-    async def add(self, ctx, tag):
+    async def add(self, ctx, preTag):
+        tag = preTag.title()
         if tag in self.qiita_tags:
             await ctx.send(f"すでに{tag}は存在しています。")
             return
@@ -85,7 +86,8 @@ class QiitaCog(commands.Cog):
         await ctx.send(f"\nCurrent tags:{self.qiita_tags}")
     
     @qiita.command()
-    async def remove(self, ctx, tag):
+    async def remove(self, ctx, preTag):
+        tag = preTag.title()
         if tag not in self.qiita_tags:
             await ctx.send(f"{tag}は存在しません。")
             return
