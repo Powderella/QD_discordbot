@@ -41,13 +41,14 @@ class QiitaCog(commands.Cog):
                 
                 if (self.articlesCreatedAt[tag] >= atricleCreatedAt):
                     break
-                msg = "{}\n" + f'{article["title"]}\n{article["url"]}'
+                msg = f'{article["title"]}\n{article["url"]}'
                 if first_loop:
-                    msg.format(tag)
+                    contextMessage = f"{tag}\n"
                     first_loop = False
                 else:
+                    contextMessage = ""
                     msg.format("")
-                await self.defaultChannel.send(msg)
+                await self.defaultChannel.send(contextMessage + msg)
             self.articlesCreatedAt[tag] = latestArticle
 
         self._check_tag()
