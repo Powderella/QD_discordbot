@@ -3,6 +3,7 @@ import discord
 import datetime
 import shelve
 import requests
+import re
 
 from lib import qiita
 
@@ -14,6 +15,7 @@ class QiitaCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.defaultChannel = None
+        self.favorite = "⭐"
         self.qtapi = qiita.QiitaTagAPI()
         self.defaultDatetime = datetime.datetime.strptime("1990-01-01 00:00:00", "%Y-%m-%d %H:%M:%S")
         self.printQiitaArticleLatest.start()
@@ -27,26 +29,20 @@ class QiitaCog(commands.Cog):
     @tasks.loop(minutes=QIITA_LOOP_TIME)
     async def printQiitaArticleLatest(self):
         for tag in self.qiita_tags:
-            first_loop = True
             # 記事取得
             self.qtapi.tag = tag
-            articles = await self.qtapi.fetchArticlesFromTag()
+            articles = await self.qtapi.fetchArticlesFromTag(item_num=10)
             # 読み取った最新の記事の作られた時間を保存
             latestArticle = datetime.datetime.strptime(articles[0]["created_at"],
                                                     "%Y-%m-%dT%H:%M:%S+09:00")
-            for article in articles:
+            for article in articles[::-1]:
                 atricleCreatedAt = datetime.datetime.strptime(article["created_at"], "%Y-%m-%dT%H:%M:%S+09:00")
                 
                 if (self.articlesCreatedAt[tag] >= atricleCreatedAt):
                     break
-                msg = f'{article["title"]}\n{article["url"]}'
-                if first_loop:
-                    contextMessage = f"{tag}\n"
-                    first_loop = False
-                else:
-                    contextMessage = ""
-                    msg.format("")
-                await self.defaultChannel.send(contextMessage + msg)
+                msg = f'{tag}\n{article["title"]}\n{article["url"]}'
+                sentMessage = await self.defaultChannel.send(msg)
+                await sentMessage.add_reaction(self.favorite)
             self.articlesCreatedAt[tag] = latestArticle
 
         self._check_tag()
@@ -56,6 +52,22 @@ class QiitaCog(commands.Cog):
     async def beforePrintQiitaArticleLatest(self):
         await self.bot.wait_until_ready()
         self.defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
+    
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        if user.bot or not reaction.message.author.bot \
+            or not "https://qiita.com" in reaction.message.content:
+            
+            return
+
+        with shelve.open(DB_DIR) as db:
+            msg = reaction.message
+            tag = msg.content.split("\n")[0].title()
+            try:
+                db["fav" + tag].append(msg.id)
+            except AttributeError:
+                db["fav" + tag] = [msg.id]
+
 
 
     """
@@ -96,12 +108,16 @@ class QiitaCog(commands.Cog):
         await ctx.send(message)
         self._check_tag()
         await ctx.send(f"\nCurrent tags:{self.qiita_tags}")
-
     
     @qiita.command()
     async def check(self, ctx):
         self._check_tag()
         await ctx.send(f"\nCurrent tags:{self.qiita_tags}")
+    
+    @qiita.command(aliases="fav")
+    async def show_favorites(self, ctx, tag):
+        with shelve.open(DB_DIR) as db:
+            ctx.send(str(db["fav"+tag]))
 
     
     def _check_tag(self):

@@ -17,7 +17,7 @@ else:
 
 
 QIITA_TAG_URL = "https://qiita.com/api/v2/tags/{}/items"
-QIITA_LOOP_TIME = 3.0   # minute
+QIITA_LOOP_TIME = 5.0   # minute
 
 DB_DIR = "./db/shelve"
 
@@ -25,4 +25,4 @@ LOCAL_PATH_DBFILE = "./db.zip"
 LOCAL_PATH_DBFOLDER = "db"
 
 PATH_DROPBOX = "/db.zip"
-UPLOAD_LOOP_TIME = 5.0  # minute
+UPLOAD_LOOP_TIME = 10.0  # minute
