@@ -35,7 +35,7 @@ class QiitaCog(commands.Cog):
             # 読み取った最新の記事の作られた時間を保存
             latestArticle = datetime.datetime.strptime(articles[0]["created_at"],
                                                     "%Y-%m-%dT%H:%M:%S+09:00")
-            for article in articles[::-1]:
+            for article in articles:
                 atricleCreatedAt = datetime.datetime.strptime(article["created_at"], "%Y-%m-%dT%H:%M:%S+09:00")
                 
                 if (self.articlesCreatedAt[tag] >= atricleCreatedAt):
