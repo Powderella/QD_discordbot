@@ -117,12 +117,13 @@ class QiitaCog(commands.Cog):
     @qiita.command(aliases=["fav"])
     async def show_favorites(self, ctx, tag):
         with shelve.open(DB_DIR) as db:
+            for k in db.keys():
+                print(k)
             ctx.send(str(db[str(ctx.author.id) + tag.title()]))
 
     
     def _check_tag(self):
         with shelve.open(DB_DIR) as db:
-            print(db.keys())
             db["qiita_tags"] = self.qiita_tags
             print(db["qiita_tags"])
             db["articles_createdat"] = self.articlesCreatedAt
