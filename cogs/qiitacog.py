@@ -122,6 +122,7 @@ class QiitaCog(commands.Cog):
     
     def _check_tag(self):
         with shelve.open(DB_DIR) as db:
+            print(db.keys())
             db["qiita_tags"] = self.qiita_tags
             print(db["qiita_tags"])
             db["articles_createdat"] = self.articlesCreatedAt
