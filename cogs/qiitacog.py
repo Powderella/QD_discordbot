@@ -57,12 +57,12 @@ class QiitaCog(commands.Cog):
     async def on_reaction_add(self, reaction, user):
         if user.bot or not reaction.message.author.bot \
             or not "https://qiita.com" in reaction.message.content:
-            
+            print("return")
             return
 
+        msg = reaction.message
+        tag = msg.content.split("\n")[0].title()
         with shelve.open(DB_DIR) as db:
-            msg = reaction.message
-            tag = msg.content.split("\n")[0].title()
             try:
                 db[str(user.id) + tag].append(msg.id)
             except KeyError:
