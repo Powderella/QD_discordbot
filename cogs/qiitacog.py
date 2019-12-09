@@ -64,9 +64,9 @@ class QiitaCog(commands.Cog):
             msg = reaction.message
             tag = msg.content.split("\n")[0].title()
             try:
-                db[user.id + tag].append(msg.id)
+                db[str(user.id) + tag].append(msg.id)
             except KeyError:
-                db[user.id + tag] = [msg.id]
+                db[str(user.id) + tag] = [msg.id]
 
 
 
@@ -117,7 +117,7 @@ class QiitaCog(commands.Cog):
     @qiita.command(aliases=["fav"])
     async def show_favorites(self, ctx, tag):
         with shelve.open(DB_DIR) as db:
-            ctx.send(str(db[ctx.author.id + tag.title()]))
+            ctx.send(str(db[str(ctx.author.id) + tag.title()]))
 
     
     def _check_tag(self):
