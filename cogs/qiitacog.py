@@ -117,9 +117,7 @@ class QiitaCog(commands.Cog):
     @qiita.command(aliases=["fav"])
     async def show_favorites(self, ctx, tag):
         with shelve.open(DB_DIR) as db:
-            for k in db.keys():
-                print(k)
-            ctx.send(str(db[str(ctx.author.id) + tag.title()]))
+            await ctx.send(db[str(ctx.author.id) + tag.title()])
 
     
     def _check_tag(self):
