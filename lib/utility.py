@@ -1,5 +1,7 @@
 import time
 import functools
+import os
+
 def processingTimeDecorator(f):
     @functools.wraps(f)
     def wrapper(*args, **kwargs):
@@ -9,3 +11,9 @@ def processingTimeDecorator(f):
         print(f"{f.__name__}は{elapse:.4}秒かかりました。")
         return result
     return wrapper
+
+def setupDirectory(filepath):
+    dirpath = os.path.split(filepath)[0]
+    if dirpath is None:
+        return
+    os.makedirs(dirpath, exist_ok=True)

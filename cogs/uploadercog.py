@@ -1,5 +1,6 @@
 from discord.ext import commands, tasks
 import shutil
+import filecmp
 import dropbox
 from settings import LOCAL_PATH_DBFILE, LOCAL_PATH_DBFOLDER, PATH_DROPBOX, DROPBOX_TOKEN, UPLOAD_LOOP_TIME
 
@@ -10,6 +11,7 @@ class UploaderCog(commands.Cog):
         self.dbx = dropbox.Dropbox(DROPBOX_TOKEN)
         self.dbx.users_get_current_account()
         self.uploadDBLoop.start()
+    
     def cog_unload(self):
         self.uploadDBLoop.cancel()
     
