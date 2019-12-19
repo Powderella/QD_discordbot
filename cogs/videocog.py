@@ -22,7 +22,9 @@ class VideoCog(commands.Cog):
         """disconnect
 
         """
-        await ctx.message.guild.voice_client.disconnect()
+        vc = ctx.message.guild.voice_client
+        if vc.is_connect():
+            await vc.disconnect()
         
     @commands.command()
     async def niconico(self, ctx, url):
