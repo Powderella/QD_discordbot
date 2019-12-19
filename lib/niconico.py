@@ -16,7 +16,9 @@ class NiconicoVideo:
                 content = await response.content.read()
         soup = BeautifulSoup(content, "html.parser")
         init_data = soup.find("div", id="js-initial-watch-data")
-        dmcInfo = json.loads(str(init_data)[20:-1704])
+        s = str(init_data)[20:-1704].replace("&quot;", '"')
+        dmcInfo = json.loads(s)
+        
         return dmcInfo["video"]["dmcInfo"]["session_api"]
 
     async def loginNico(self, session, mailAddr=None, password=None):

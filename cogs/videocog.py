@@ -17,8 +17,13 @@ class VideoCog(commands.Cog):
         """
         nv = niconico.NiconicoVideo(url)
         async with aiohttp.ClientSession() as session:
-            dl_url = await nv.getDownloadUrl(session)
-        await ctx.send(dl_url)
+            try:
+                message = await nv.getDownloadUrl(session)
+            except TypeError:
+                message = "古い動画です。"
+            except ConnectionError:
+                message = "通信エラー"
+        await ctx.send(message)
         
 def setup(bot):
     bot.add_cog(VideoCog(bot))
