@@ -9,17 +9,30 @@ class NiconicoVideo:
     """
     def __init__(self, url):
         self.url = url
-        
-    async def _fetchDmcInfo(self):
+        self._isOldDouga = False
+    
+    async def _fetchDougaInfo(self):
         async with aiohttp.ClientSession() as session:
             async with session.get(self.url) as response:
                 content = await response.content.read()
-        soup = BeautifulSoup(content, "html.parser")
+        return BeautifulSoup(content, "html.parser")
+
+        
+    async def _parseInfo(self):
+        soup = await self._fetchDougaInfo()
         init_data = soup.find("div", id="js-initial-watch-data")
         s = str(init_data)[20:-1704].replace("&quot;", '"')
         dmcInfo = json.loads(s)
-        
-        return dmcInfo["video"]["dmcInfo"]["session_api"]
+        videoInfo = dmcInfo["video"]
+
+        if videoInfo.get("dmcInfo") is None:
+            info = videoInfo["smileInfo"]["url"]
+            self._isOldDouga = True
+        else:
+            info = videoInfo["dmcInfo"]["session_api"]
+            self._isOldDouga = False
+
+        return info
 
     async def loginNico(self, session, mailAddr=None, password=None):
         """niconicoにログイン
@@ -31,9 +44,14 @@ class NiconicoVideo:
         }
         response = await session.post(login_url, data=account)
         response.raise_for_status()
+
     
     async def getDownloadUrl(self, session):
-        d = await self._fetchDmcInfo()
+        d = await self._parseInfo()
+        
+        if self._isOldDouga is True:
+            return d
+
         payload = {"session": {
                 "recipe_id": d["recipe_id"],
                 "content_id": d["content_id"],
@@ -97,7 +115,7 @@ class NiconicoVideo:
         return data["data"]["session"]["content_uri"]
 
 async def main():
-    nv = NiconicoVideo("https://www.nicovideo.jp/watch/sm36101094")
+    nv = NiconicoVideo("https://www.nicovideo.jp/watch/sm18581491")
 
     async with aiohttp.ClientSession() as session:
         url = await nv.getDownloadUrl(session)
