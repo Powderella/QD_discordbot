@@ -2,7 +2,6 @@ from discord.ext import commands, tasks
 import discord
 import datetime
 import shelve
-import requests
 import re
 
 from lib import qiita
@@ -15,7 +14,6 @@ class QiitaCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.defaultChannel = None
-        self.favorite = "⭐"
         self.qtapi = qiita.QiitaTagAPI()
         self.defaultDatetime = datetime.datetime.strptime("1990-01-01 00:00:00", "%Y-%m-%d %H:%M:%S")
         self.printQiitaArticleLatest.start()
@@ -41,8 +39,7 @@ class QiitaCog(commands.Cog):
                 if (self.articlesCreatedAt[tag] >= atricleCreatedAt):
                     break
                 msg = f'{tag}\n{article["title"]}\n{article["url"]}'
-                sentMessage = await self.defaultChannel.send(msg)
-                await sentMessage.add_reaction(self.favorite)
+                await self.defaultChannel.send(msg)
             self.articlesCreatedAt[tag] = latestArticle
 
         self._check_tag()
