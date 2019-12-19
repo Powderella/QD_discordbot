@@ -1,5 +1,5 @@
 from discord.ext import commands # Bot Commands Frameworkのインポート
-import niconico
+from lib import niconico
 import aiohttp
 
 # コグとして用いるクラスを定義。
@@ -15,10 +15,10 @@ class VideoCog(commands.Cog):
         """ニコニコ動画のDLリンク
 
         """
-        nv = niconico.NiconicoVideo()
+        nv = niconico.NiconicoVideo(url)
         async with aiohttp.ClientSession() as session:
-            url = await nv.getDownloadUrl(session)
-        await ctx.send(url)
+            dl_url = await nv.getDownloadUrl(session)
+        await ctx.send(dl_url)
         
 def setup(bot):
     bot.add_cog(VideoCog(bot))
