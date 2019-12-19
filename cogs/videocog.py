@@ -11,6 +11,19 @@ class VideoCog(commands.Cog):
 
     # コマンドの作成。コマンドはcommandデコレータで必ず修飾する。
     @commands.command()
+    async def connect(self, ctx):
+        """connect
+        
+        """
+        await ctx.author.voice.channel.connect()
+    
+    @commands.command()
+    async def connect(self, ctx):
+        """disconnect
+
+        """
+        await ctx.message.guild.voice_client.disconnect()
+    @commands.command()
     async def niconico(self, ctx, url):
         """ニコニコ動画のDLリンク
 
