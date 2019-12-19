@@ -23,7 +23,7 @@ class VideoCog(commands.Cog):
 
         """
         vc = ctx.message.guild.voice_client
-        if vc.is_connect():
+        if vc.is_connected():
             await vc.disconnect()
         
     @commands.command()
