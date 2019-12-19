@@ -18,11 +18,12 @@ class VideoCog(commands.Cog):
         await ctx.author.voice.channel.connect()
     
     @commands.command()
-    async def connect(self, ctx):
+    async def disconnect(self, ctx):
         """disconnect
 
         """
         await ctx.message.guild.voice_client.disconnect()
+        
     @commands.command()
     async def niconico(self, ctx, url):
         """ニコニコ動画のDLリンク
