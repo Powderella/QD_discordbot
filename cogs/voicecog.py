@@ -21,12 +21,37 @@ class VoiceCog(commands.Cog):
         """vc disconnect
 
         """
-        vc = ctx.message.guild.voice_client
+        vc = ctx.voice_client
         if vc is None:
             return
         if vc.is_connected():
             await vc.disconnect()
+    
+    @commands.command()
+    async def pause(self, ctx):
+        """
+        """
+        vc = ctx.voice_client
+        if vc is None:
+            return
+        if vc.is_playing():
+            vc.pause() 
 
+    @commands.command()
+    async def resume(self, ctx):
+        vc = ctx.voice_client
+        if vc is None:
+            return
+        if vc.is_paused():
+            vc.resume()
+    
+    @commands.command()
+    async def stop(self, ctx):
+        vc = ctx.voice_client
+        if vc is None:
+            return
+        if vc.is_playing():
+            vc.stop()
         
 def setup(bot):
     bot.add_cog(VoiceCog(bot))

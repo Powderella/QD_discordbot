@@ -43,6 +43,7 @@ class VideoCog(commands.Cog):
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
         
         length = MP4(self.savePath).info.length
+        print(MP4(self.savePath).info)
         playTime = f"{int(length // 60)}:{int(length % 60)}"
         await message.edit(content=f"再生中.\nダウンロードにかかった時間{time.time() - start:.3f}sec.\n再生時間{playTime}")
         
