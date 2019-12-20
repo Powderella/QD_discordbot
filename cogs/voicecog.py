@@ -11,10 +11,11 @@ class VoiceCog(commands.Cog):
         
         """
         vc = ctx.voice_client
-        botVoiceclients = [vc.channel for vc in self.bot.voice_clients] 
-        if not vc is None and not vc.channel in botVoiceclients:
-            vc = await vc.channel.connect()
-            vc.stop()
+        botVoiceChannels = [vc.channel for vc in self.bot.voice_clients] 
+        if vc is None or vc.channel in botVoiceChannels:
+            return
+        vc = await vc.channel.connect()
+        vc.stop()
 
     
     @commands.command()
