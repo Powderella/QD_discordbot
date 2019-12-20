@@ -1,6 +1,8 @@
 import time
 import functools
 import os
+import asyncio
+import aiohttp
 
 def processingTimeDecorator(f):
     @functools.wraps(f)
@@ -17,3 +19,16 @@ def setupDirectory(filepath):
     if dirpath is None:
         return
     os.makedirs(dirpath, exist_ok=True)
+
+async def download(session, url, savepath, max_size, chunk_size=1024):
+    """maxsize:単位KB
+    """
+    downloaded_size = 0
+    async with session.get(url, timeout=600) as r:
+        with open(savepath, "wb") as f:
+            while True:
+                chunk = await r.content.read(chunk_size)
+                if not chunk or downloaded_size > max_size:
+                    break
+                f.write(chunk)
+                downloaded_size += chunk_size / 1024

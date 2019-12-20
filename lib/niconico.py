@@ -115,7 +115,7 @@ class NiconicoVideo:
         return data["data"]["session"]["content_uri"]
 
 async def main():
-    nv = NiconicoVideo("https://www.nicovideo.jp/watch/sm18581491")
+    nv = NiconicoVideo("https://www.nicovideo.jp/watch/sm32038706")
 
     async with aiohttp.ClientSession() as session:
         url = await nv.getDownloadUrl(session)

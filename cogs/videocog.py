@@ -1,6 +1,9 @@
 from discord.ext import commands # Bot Commands Frameworkのインポート
+import discord
 from lib import niconico
 import aiohttp
+import asyncio
+from lib import utility
 
 # コグとして用いるクラスを定義。
 class VideoCog(commands.Cog):
@@ -8,38 +11,48 @@ class VideoCog(commands.Cog):
     # TestCogクラスのコンストラクタ。Botを受取り、インスタンス変数として保持。
     def __init__(self, bot):
         self.bot = bot
+        self.savePath = "./resource/douga.mp3"
 
-    # コマンドの作成。コマンドはcommandデコレータで必ず修飾する。
-    @commands.command()
-    async def connect(self, ctx):
-        """connect
-        
+    def _makeEmbedPlayer(self):
+        pass
+
+    @commands.group()
+    async def niconico(self, ctx):
         """
-        await ctx.author.voice.channel.connect()
+        """
+        if ctx.invoked_subcommand is None:
+            await ctx.send("サブコマンドを入力してください。")
+
+    @commands.command(name="play")
+    async def niconicoplay(self, ctx, url):
+        url = self._fetchNiconicoDlLink(url)
+        message = await ctx.send("ダウンロード中...")
+        async with aiohttp.ClientSession() as session:
+            utility.download(session, url, self.savePath, 307200)
+        await message.edit(content="ダウンロード完了")
+
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(self.savePath))
+        ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
+
+        await message.edit(content="再生中")
+        
+    @commands.command(name="link")
+    async def niconicolink(self, ctx, url):
+        """ニコニコ動画のDLリンク生成
+        """
+        message = self._fetchNiconicoDlLink(url)
+        await ctx.send(message)
     
-    @commands.command()
-    async def disconnect(self, ctx):
-        """disconnect
-
+    def _fetchNiconicoDlLink(self, url):
         """
-        vc = ctx.message.guild.voice_client
-        if vc.is_connected():
-            await vc.disconnect()
-        
-    @commands.command()
-    async def niconico(self, ctx, url):
-        """ニコニコ動画のDLリンク
-
         """
         nv = niconico.NiconicoVideo(url)
         async with aiohttp.ClientSession() as session:
             try:
                 message = await nv.getDownloadUrl(session)
-            except TypeError:
-                message = "古い動画です。"
             except ConnectionError:
                 message = "通信エラー"
-        await ctx.send(message)
-        
+        return message
+
 def setup(bot):
     bot.add_cog(VideoCog(bot))
