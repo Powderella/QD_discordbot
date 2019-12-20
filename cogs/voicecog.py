@@ -24,6 +24,8 @@ class VoiceCog(commands.Cog):
 
         """
         vc = ctx.message.guild.voice_client
+        if vc is None:
+            return
         if vc.is_connected():
             await vc.disconnect()
 
