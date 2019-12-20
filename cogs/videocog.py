@@ -35,7 +35,7 @@ class VideoCog(commands.Cog):
         url = await self._fetchNiconicoDlLink(url)
         message = await ctx.send("ダウンロード中...")
         start = time.time()
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) as session:
             self.heartBeat.start(session)
             await utility.download(session, url, self.savePath, 30720)
             self.heartBeat.cancel()
