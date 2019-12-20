@@ -24,11 +24,12 @@ async def download(session, url, savepath, max_size, chunk_size=1024):
     """maxsize:単位KB
     """
     downloaded_size = 0
-    async with session.get(url, timeout=600) as r:
+    async with session.get(url, timeout=None) as r:
         with open(savepath, "wb") as f:
             while True:
                 chunk = await r.content.read(chunk_size)
-                if not chunk or downloaded_size > max_size:
+                if not chunk or (downloaded_size / 1024) > max_size:
                     break
                 f.write(chunk)
-                downloaded_size += chunk_size / 1024
+                downloaded_size += chunk_size
+                print(f"{downloaded_size}/{len(r.content)}")

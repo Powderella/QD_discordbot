@@ -3,3 +3,4 @@ discord.py[voice]
 pytz==2019.3
 requests==2.21.0
 dropbox
+mutagen

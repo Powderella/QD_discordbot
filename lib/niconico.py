@@ -31,7 +31,6 @@ class NiconicoVideo:
         else:
             info = videoInfo["dmcInfo"]["session_api"]
             self._isOldDouga = False
-
         return info
 
     async def loginNico(self, session, mailAddr=None, password=None):
@@ -110,15 +109,21 @@ class NiconicoVideo:
         session_url = "https://api.dmc.nico/api/sessions?_format=json"
         response = await session.post(session_url, json=payload)
         response.raise_for_status()
-        data = await response.json()
-        
-        return data["data"]["session"]["content_uri"]
+        self.responseData = await response.json()
+        self.payload = payload
+        return self.responseData["data"]["session"]["content_uri"]
+
+    async def heartBeat(self, session):
+        session_url = f"https://api.dmc.nico/api/sessions/{self.responseData['data']['session']['id']}?_format=json&_method=PUT"
+        response = await session.post(session_url, json=self.responseData["data"])
+        response.raise_for_status()
 
 async def main():
     nv = NiconicoVideo("https://www.nicovideo.jp/watch/sm32038706")
 
     async with aiohttp.ClientSession() as session:
         url = await nv.getDownloadUrl(session)
+        await nv.heartBeat(session)
     print(url)
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()

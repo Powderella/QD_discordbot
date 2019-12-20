@@ -10,13 +10,11 @@ class VoiceCog(commands.Cog):
         """vc connect
         
         """
-        vc = ctx.voice_client
+        vc = ctx.author.voice
         botVoiceChannels = [vc.channel for vc in self.bot.voice_clients] 
         if vc is None or vc.channel in botVoiceChannels:
             return
         vc = await vc.channel.connect()
-        vc.stop()
-
     
     @commands.command()
     async def disconnect(self, ctx):
