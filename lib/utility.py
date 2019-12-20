@@ -32,4 +32,3 @@ async def download(session, url, savepath, max_size, chunk_size=1024):
                     break
                 f.write(chunk)
                 downloaded_size += chunk_size
-                print(f"{downloaded_size}/{len(r.content)}")
