@@ -23,9 +23,9 @@ class VideoCog(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send("サブコマンドを入力してください。")
 
-    @commands.command(name="play")
+    @niconico.command(name="play")
     async def niconicoplay(self, ctx, url):
-        url = self._fetchNiconicoDlLink(url)
+        url = await self._fetchNiconicoDlLink(url)
         message = await ctx.send("ダウンロード中...")
         async with aiohttp.ClientSession() as session:
             utility.download(session, url, self.savePath, 307200)
@@ -36,14 +36,14 @@ class VideoCog(commands.Cog):
 
         await message.edit(content="再生中")
         
-    @commands.command(name="link")
+    @niconico.command(name="link")
     async def niconicolink(self, ctx, url):
         """ニコニコ動画のDLリンク生成
         """
-        message = self._fetchNiconicoDlLink(url)
+        message = await self._fetchNiconicoDlLink(url)
         await ctx.send(message)
     
-    def _fetchNiconicoDlLink(self, url):
+    async def _fetchNiconicoDlLink(self, url):
         """
         """
         nv = niconico.NiconicoVideo(url)
