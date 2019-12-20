@@ -22,7 +22,7 @@ class BasicCog(commands.Cog):
         message = f"こんにちは,{ctx.author}"
         await ctx.send(message)
 
-    @commands.command()
+    @commands.command(hidden=True, aliases=["cog"])
     async def reloadcog(self, ctx, cogName):
         """
         こぐのリロード
@@ -38,7 +38,8 @@ class BasicCog(commands.Cog):
         finally:
             await ctx.send(message)
 
-    @commands.command()
+    @commands.command(hidden=True)
+    @commands.is_owner()
     async def kill(self, ctx):
         """
         ぼっと殺害事件
@@ -46,9 +47,8 @@ class BasicCog(commands.Cog):
         print("kill bot")
         await self.bot.logout()
     
-    @commands.command()
-    @commands.is_owner()
-    async def change_game(self, ctx, game):
+    @commands.command(aliases=["game"])
+    async def changegame(self, ctx, game):
         game = discord.Game(game)
         await self.bot.change_presence(activity=game)
 

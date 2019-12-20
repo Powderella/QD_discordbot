@@ -49,22 +49,6 @@ class QiitaCog(commands.Cog):
     async def beforePrintQiitaArticleLatest(self):
         await self.bot.wait_until_ready()
         self.defaultChannel = self.bot.get_channel(DISCORD_DEFAULT_CHANNEL)
-    
-    @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, user):
-        if user.bot or not reaction.message.author.bot \
-            or not "https://qiita.com" in reaction.message.content:
-            print("return")
-            return
-
-        msg = reaction.message
-        tag = msg.content.split("\n")[0].title()
-        with shelve.open(DB_DIR) as db:
-            try:
-                db[str(user.id) + tag].append(msg.id)
-            except KeyError:
-                db[str(user.id) + tag] = [msg.id]
-
 
 
     """
@@ -110,12 +94,6 @@ class QiitaCog(commands.Cog):
     async def check(self, ctx):
         self._check_tag()
         await ctx.send(f"\nCurrent tags:{self.qiita_tags}")
-    
-    @qiita.command(aliases=["fav"])
-    async def show_favorites(self, ctx, tag):
-        with shelve.open(DB_DIR) as db:
-            await ctx.send(db[str(ctx.author.id) + tag.title()])
-
     
     def _check_tag(self):
         with shelve.open(DB_DIR) as db:
