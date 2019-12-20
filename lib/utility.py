@@ -20,7 +20,7 @@ def setupDirectory(filepath):
         return
     os.makedirs(dirpath, exist_ok=True)
 
-async def download(session, url, savepath, max_size, chunk_size=1024):
+async def download(session, url, savepath, max_size, chunk_size=10):
     """maxsize:単位KB
     """
     downloaded_size = 0
