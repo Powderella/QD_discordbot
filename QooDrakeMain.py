@@ -50,7 +50,8 @@ class QooDrakeMain(commands.Bot):
         print("opus lib is loaded :", discord.opus.is_loaded())
         """
         self.owner_id = DISCORD_OWNER_ID
-        self.user.CustomActivity("BEYOND THE PIEN", emoji="🥺")
+        cusActivity = discord.CustomActivity("BEYOND THE PIEN", emoji="🥺")
+        self.change_presence(activity=cusActivity)
         buttonitem = self.ui.Button(label="piepiepoe")
         uiv = self.ui.View()
         uiv.additem(buttonitem)
