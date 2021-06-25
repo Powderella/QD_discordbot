@@ -51,10 +51,8 @@ class QooDrakeMain(commands.Bot):
         """
         self.owner_id = DISCORD_OWNER_ID
         cusActivity = discord.CustomActivity("BEYOND THE PIEN", emoji="🥺")
-        await self.change_presence(activity=cusActivity)
-        buttonitem = self.ui.Button(label="piepiepoe")
-        uiv = self.ui.View()
-        uiv.additem(buttonitem)
+        await self.bot.change_presence(activity=cusActivity)
+
 if __name__ == "__main__":
     bot = QooDrakeMain(command_prefix="/")
     bot.run(DISCORD_TOKEN)
