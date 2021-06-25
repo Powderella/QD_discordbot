@@ -53,5 +53,5 @@ class QooDrakeMain(commands.Bot):
         discord.CustomActivity("BEYOND THE PIEN", emoji="🥺")
         
 if __name__ == "__main__":
-    bot = QooDrakeMain(command_prefix="/)
+    bot = QooDrakeMain(command_prefix="/")
     bot.run(DISCORD_TOKEN)
