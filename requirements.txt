@@ -1,5 +1,5 @@
 beautifulsoup4==4.6.3
-discord.py[voice]
+discord.py
 pytz==2019.3
 requests==2.21.0
 dropbox
