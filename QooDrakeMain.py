@@ -50,8 +50,8 @@ class QooDrakeMain(commands.Bot):
         print("opus lib is loaded :", discord.opus.is_loaded())
         """
         self.owner_id = DISCORD_OWNER_ID
-        self.CustomActivity("BEYOND THE PIEN", ,emoji="🥺")
+        discord.CustomActivity("BEYOND THE PIEN", ,emoji="🥺")
 
 if __name__ == "__main__":
-    bot = QooDrakeMain(command_prefix="?")
+    bot = QooDrakeMain(command_prefix="/)
     bot.run(DISCORD_TOKEN)
