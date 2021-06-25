@@ -44,10 +44,13 @@ class QooDrakeMain(commands.Bot):
 
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
+        """ opus 読み込めないため一旦消し
         if not discord.opus.is_loaded(): 
             discord.opus.load_opus("heroku-buildpack-libopus")
         print("opus lib is loaded :", discord.opus.is_loaded())
+        """
         self.owner_id = DISCORD_OWNER_ID
+        self.CustomActivity("BEYOND THE PIEN", ,emoji="🥺")
 
 if __name__ == "__main__":
     bot = QooDrakeMain(command_prefix="?")
